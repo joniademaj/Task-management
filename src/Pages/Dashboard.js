@@ -15,6 +15,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import DragandDrop from '../components/DragandDrop'
 import Button from '../components/Button'
 import Modal from '../components/Modal'
+import TaskModal from '../components/TaskModal'
 
 // import HamburgerButton from './HamburgerMenuButton/HamburgerButton'
 
@@ -24,6 +25,12 @@ const Dashboard = () => {
   const location = useLocation()
   const [showContent, setShowContent] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [activeTab, setActiveTab] = useState(0); // Track the active tab
+
+  const handleTabClick = (tabIndex) => {
+    setActiveTab(tabIndex); // Update the active tab when a tab is clicked
+  };
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -135,6 +142,7 @@ const Dashboard = () => {
                     } origin-left duration-300 hover:block`}
                   >
                     {menu.title}
+                    
                   </span>
                 </li>
               </Link>
@@ -264,47 +272,3 @@ const Dashboard = () => {
 }
 
 export default Dashboard;
-
-// function TaskList() {
-//     const [tasks, setTasks] = useState([
-//       { id: 'task-1', title: 'Task 1' },
-//       { id: 'task-2', title: 'Task 2' },
-//       { id: 'task-3', title: 'Task 3' },
-//     ]);
-  
-//     const onDragEnd = (result) => {
-//       if (!result.destination) return;
-//       const items = Array.from(tasks);
-//       const [reorderedItem] = items.splice(result.source.index, 1);
-//       items.splice(result.destination.index, 0, reorderedItem);
-//       setTasks(items);
-//     };
-  
-//     return (
-//       <DragDropContext onDragEnd={onDragEnd}>
-//         <Droppable droppableId="task-list">
-//           {(provided) => (
-//             <div {...provided.droppableProps} ref={provided.innerRef}>
-//               {tasks.map((task, index) => (
-//                 <TaskRow key={task.id} task={task} index={index} />
-//               ))}
-//               {provided.placeholder}
-//             </div>
-//           )}
-//         </Droppable>
-//       </DragDropContext>
-//     );
-//   }
-// function Dashboard() {
-//     const handleSearch = (query) => {
-//       // Do something with the search query, like filter tasks
-//       console.log(`Searching for tasks with query "${query}"...`);
-//     };
-  
-//     return (
-//       <div>
-//         <SearchBar onSearch={handleSearch} />
-//         {/* Render your tasks here */}
-//       </div>
-//     );
-//   }

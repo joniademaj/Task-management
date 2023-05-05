@@ -4,19 +4,36 @@ import { NavLink } from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import logo from '../../public/logo.png';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
+import React, { useEffect, useState } from 'react';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', current: true },
   { name: 'Pricing', href: '/pricing', current: false },
-  { name: 'Projects', href: '#', current: false },
   { name: 'Calendar', href: '/calendar', current: false },
 ]
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Navigation() {
+
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+useEffect(() => {
+  if (isDarkMode) {
+    document.body.classList.add("dark-mode");
+  } else {
+    document.body.classList.remove("dark-mode");
+  }
+}, [isDarkMode]);
+
+const handleDarkModeToggle = () => {
+  setIsDarkMode(!isDarkMode);
+};
   return (
     <Disclosure as="nav" className="nav bg-gray-800">
       {({ open }) => (
@@ -46,7 +63,8 @@ export default function Navigation() {
                     src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
                     alt="Your Company"
                   /> */}
-                  <h2 className="logo">Logo</h2>
+                  {/* <h2 className="logo">Logo</h2> */}
+                  <img src={logo} style={{width: "100px"}}/>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex justify-end space-x-4">
@@ -62,12 +80,23 @@ export default function Navigation() {
                         {item.name}
                       </Link>
                     ))}
+
+                    <div>
+
+                    {/* <button onClick={handleDarkModeToggle}>
+                      <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} />
+                    </button> */}
+
+
+                    </div>
                   </div>
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
                 {/* Profile dropdown */}
+
+                
 
                 <Link to="/register">
                   Register 

@@ -768,3 +768,7 @@ transform: rotate(45deg)
     margin: 20px 10px;
   }
 }
+.dark-mode {
+  background-color: black;
+  color: white;
+}

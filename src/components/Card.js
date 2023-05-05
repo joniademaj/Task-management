@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { FiUser, FiCalendar, FiFlag } from 'react-icons/fi';
-
+import { FiUser, FiCalendar, FiFlag, FiEdit, FiTrash } from 'react-icons/fi';
+import TaskModal from "./TaskModal";
 const Card = ({ text, id, draggable, onDragStart }) => {
 
   const [isDragging, setIsDragging] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 
   const handleDragStart = (e, id) => {
     setIsDragging(true);
@@ -22,6 +23,14 @@ const Card = ({ text, id, draggable, onDragStart }) => {
   const handleCloseModal = () => {
     console.log("Closed");
     setShowModal(false);
+  };
+
+  const handleTaskModalOpen = () => {
+    setIsTaskModalOpen(true);
+  };
+
+  const handleTaskModalClose = () => {
+    setIsTaskModalOpen(false);
   };
     return (
     //   <div
@@ -64,6 +73,15 @@ const Card = ({ text, id, draggable, onDragStart }) => {
           <div style={{margin: "0px 25px"}}> 
             <FiFlag />
           </div>
+          <div style={{margin: "0px 25px"}}> 
+            <div>
+              <button onClick={handleTaskModalOpen}><FiEdit /></button>
+              <TaskModal isOpen={isTaskModalOpen} onClose={handleTaskModalClose} />
+            </div>
+          </div>
+          <div style={{margin: "0px 25px"}}> 
+            <FiTrash />
+          </div>
         </div>
         
         {draggable && (
@@ -75,48 +93,9 @@ const Card = ({ text, id, draggable, onDragStart }) => {
             &#8942;&#8942;&#8942;
           </span>
         )}
-      </div>
 
-      {showModal && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "5px",
-              maxWidth: "90%",
-              maxHeight: "90%",
-              overflow: "auto",
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <button onClick={() => handleCloseModal()}>Close</button>
-            </div>
-            <h2>{text}</h2>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-              consectetur leo non mauris posuere semper. Nunc euismod erat id
-              lectus finibus, quis bibendum lorem sagittis. Integer eget
-              facilisis est, in vestibulum mi. Proin porttitor ultricies justo,
-              sit amet fermentum velit tempus ut. Morbi ut erat eros. Vivamus
-              maximus erat a ex ullamcorper, vel pulvinar tellus venenatis. Sed
-              vel venenatis velit.
-            </p>
-          </div>
-        </div>
-      )}
+        
+      </div>
     </div>
     );
   };
