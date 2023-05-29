@@ -1,61 +1,165 @@
-import React from 'react'
+import React, { useState } from 'react';
 
 function Register() {
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleSubmit = async (e) => {
+
+    e.preventDefault();
+    // Email validation
+    const emailRegex = new RegExp("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
+    if (!emailRegex.test(email)) {
+      setErrorMessage('Please enter a valid email address');
+      return;
+    }
+
+    // Name validation
+    if (name.length < 5) {
+      setErrorMessage('Name must be at least 5 characters long');
+      return;
+    }
+
+    // Password validation
+    if (password.length < 4) {
+      setErrorMessage('Password must be at least 4 characters long');
+      return;
+    }
+
+    // Confirm password validation
+    if (password !== confirmPassword) {
+      setErrorMessage('Passwords do not match');
+      return;
+    }
+
+    // Clear any previous error messages
+    setErrorMessage('');
+
+    // Perform form submission logic
+    
+      // Perform form submission logic
+      const response = await fetch('http://localhost/php/task-management/app/controllers/registerController.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        alert('Successfully Inserted');
+      } else {
+        throw new Error('Error inserting data');
+      }
+    
+  };
+
+
   return (
-    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-    <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
+    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          Create your Account
+        </h2>
+      </div>
+
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+              Email address
+            </label>
+            <div className="mt-2">
+              <input
+                id="email"
+                name="email"
+                type="text"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between">
+              <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
+                Name
+              </label>
+            </div>
+            <div className="mt-2">
+              <input
+                id="name"
+                name="name"
+                type="text"
+                autoComplete="current-password"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+          <div>
+    <div className="flex items-center justify-between">
+      <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+        Password
+      </label>
+    </div>
+    <div className="mt-2">
+      <input
+        id="password"
+        name="password"
+        type="password"
+        autoComplete="current-password"
+        
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+      />
+    </div>
   </div>
 
-  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <form class="space-y-6" action="#" method="POST">
-      <div>
-        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
-        <div class="mt-2">
-          <input id="email" name="email" type="email" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-        </div>
-      </div>
-
-      <div>
-        <div class="flex items-center justify-between">
-          <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
-        </div>
-        <div class="mt-2">
-          <input id="name" name="name" type="text" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-        </div>
-      </div>
-
-      <div>
-        <div class="flex items-center justify-between">
-          <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
-          
-        </div>
-        <div class="mt-2">
-          <input id="password" name="password" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-        </div>
-      </div>
-
-      <div>
-        <div class="flex items-center justify-between">
-          <label for="confirm-password" class="block text-sm font-medium leading-6 text-gray-900">Confirm Password</label>
-        </div>
-        <div class="mt-2">
-          <input id="confrim-password" name="password" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
-        </div>
-      </div>
-
-      <div>
-        <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
-      </div>
-    </form>
-
-    <p class="mt-10 text-center text-sm text-gray-500">
-      Not a member ? 
-      <a href="#" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"> Start a 14 day free trial</a>
-    </p>
+  <div>
+    <div className="flex items-center justify-between">
+      <label htmlFor="confirm-password" className="block text-sm font-medium leading-6 text-gray-900">
+        Confirm Password
+      </label>
+    </div>
+    <div className="mt-2">
+      <input
+        id="confirm-password"
+        name="confirmPassword"
+        type="password"
+        autoComplete="current-password"
+        
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+      />
+    </div>
   </div>
+
+  {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+
+  <div>
+    <button
+      type="submit"
+      className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+    >
+      Register
+    </button>
+  </div>
+</form>
+
+<p className="mt-10 text-center text-sm text-gray-500">
+  Not a member? <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Start a 14-day free trial</a>
+</p>
 </div>
-    )
+</div>
+  )
 }
-
 export default Register;
