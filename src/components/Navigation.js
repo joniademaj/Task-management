@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { NavLink } from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import logo from '../../public/logo.png';
+// import logo from './public/logo.png';
+import logo from './logo.png';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from 'react';
