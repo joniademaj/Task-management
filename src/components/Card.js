@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { FiUser, FiCalendar, FiFlag, FiEdit, FiTrash } from 'react-icons/fi';
 import TaskModal from "./TaskModal";
-const Card = ({ text, id, draggable, onDragStart }) => {
+
+const Card = ({ text, id, draggable, onDragStart}) => {
 
   const [isDragging, setIsDragging] = useState(false);
   const [showModal, setShowModal] = useState(false);

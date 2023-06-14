@@ -1,30 +1,15 @@
+import { ContactSupport } from '@material-ui/icons';
 import React, { useState, useEffect  } from 'react';
+import Dashboard from './Dashboard';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [sessionData, setSessionData] = useState({});
+  const [session, setSession] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
-
-  useEffect(() => {
-    fetchSessions();
-  }, [loggedIn]);
-
-  const fetchSessions = async () => {
-    if(loggedIn){
-      console.log("inside");
-      try {
-        const response = await fetch('http://localhost/php/task-management/app/controllers/loginController.php');
-        const data = await response.json();
-        setSessionData(data);
-        console.log(data);
-        console.log(data.user_id);
-      } catch (error) {
-        console.error('Error fetching session data:', error);
-      }
-    }
-  }
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,10 +44,12 @@ function Login() {
     if (response.ok) {
       let data = await response.json();
       console.log(data.status);
-
+      console.log(data.user_id);
+      setSession(data);
       if(data.status == "success") {
         setLoggedIn(true);
         // fetchSessions();
+        navigate(`/dashboard/${data.user_id}`);
       }
       else{
         setErrorMessage('Email or password incorrect');
@@ -73,6 +60,11 @@ function Login() {
       setErrorMessage(errorData.message || 'Login failed');
     }
 
+
+    // if(loggedIn){
+    //   <Redirect to="/dashboard" />
+    // }
+
     // window.location.href = '/dashboard';
     // All validations passed, perform login logic here
   };
@@ -82,11 +74,12 @@ function Login() {
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        {loggedIn && <Dashboard />}
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           Sign in to your account
         </h2>
       </div>
-      <pre>{JSON.stringify(sessionData, null, 2)}</pre>
+      <pre>{JSON.stringify(session, null, 2)}</pre>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>

@@ -1,36 +1,58 @@
-// import React from 'react';
-
-// const Modal = ({ isOpen, onClose, onSubmit, children }) => {
-//   if (!isOpen) return null;
-
-//   return (
-//     <div className="modal fixed inset-0 z-50 flex items-center justify-center">
-//       <div className="modal-overlay absolute inset-0 bg-gray-900 opacity-50" onClick={onClose} />
-//       <div className="modal-content bg-white shadow-md rounded-lg">
-//         <div className="modal-header flex justify-between p-4 border-b">
-//           <h3 className="font-bold">Add New Project</h3>
-//           <button className="modal-close" onClick={onClose}>
-//             <span>&times;</span>
-//           </button>
-//         </div>
-//         <div className="modal-body p-4">
-//           <form onSubmit={onSubmit}>
-//             {children}
-//             <div className="mt-4 flex justify-end">
-//               <button className="btn btn-primary" type="submit">Save</button>
-//               <button className="btn btn-secondary ml-2" type="button" onClick={onClose}>Cancel</button>
-//             </div>
-//           </form>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Modal;
 import React, { useState } from "react";
 
 function Modal(props) {
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleSubmit = async (e) => {
+
+    e.preventDefault();
+    // Email validation
+
+    // Name validation
+    if (name.length < 5) {
+      setErrorMessage('Name must be at least 5 characters long');
+      return;
+    }
+
+    // Description validation
+    if (description.length < 15) {
+      setErrorMessage('Description must be at least 15 characters long');
+      return;
+    }
+
+    // Start Date validation
+    if (startDate.length == null) {
+      setErrorMessage('Start date is required');
+      return;
+    }
+
+    // Description validation
+    if (endDate.length == null) {
+      setErrorMessage('End date is required');
+      return;
+    }
+
+    // Clear any previous error messages
+    setErrorMessage('');
+
+    const response = await fetch('http://localhost/php/task-management/app/controllers/projectController.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, description, startDate, endDate }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      alert('Successfully Inserted');
+    } else {
+      throw new Error('Error inserting data');
+    }
+  }
   const handleClose = () => {
     props.onClose();
   };
@@ -38,40 +60,58 @@ function Modal(props) {
   return (
     <>
       {props.isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center">
-          <div className="bg-white p-10 rounded w-72 p-10 modal">
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black bg-opacity-50"></div>
+          <div className="bg-white p-10 rounded w-72 p-10 modal relative">
             <h1 className="font-semibold text-center text-xl text-gray-700">
               Create Projects
             </h1>
 
-            <div className="flex flex-col mt-5">
+            <form className="flex flex-col mt-5" onSubmit={handleSubmit}>
               <input
                 type="text"
-                className="border border-gray-700 p-2 rounded mb-5"
+                name="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="border text-dark border-gray-700 p-2 rounded mb-5"
                 placeholder="Add Project Name"
               />
               <input
-                type="number"
-                className="border border-gray-700 p-2 rounded mb-5"
-                placeholder="Size of team"
-              />
-              <input
                 type="text"
+                name="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 className="border border-gray-700 p-2 rounded mb-5"
-                placeholder="Add team members emails"
+                placeholder="Description"
               />
               <input
                 type="date"
+                name="start-date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
                 className="border border-gray-700 p-2 rounded mb-5"
-                placeholder="Date"
+                placeholder="Start Date"
               />
-            </div>
-            <div className="text-center">
-              <button className="px-5 py-2 bg-gray-700 text-white rounded">
-                Add Project
-              </button>
-            </div>
-            <button className="absolute top-0 right-0 m-2 close-btn" onClick={handleClose}>
+              <input
+                type="date"
+                name="end-date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="border border-gray-700 p-2 rounded mb-5"
+                placeholder="End Date"
+              />
+
+              <div className="text-center">
+                <button className="px-5 py-2 bg-gray-700 text-white rounded">
+                  Add Project
+                </button>
+              </div>
+            </form>
+            
+            <button
+              className="absolute top-0 right-0 m-2 text-gray-700 close-btn"
+              onClick={handleClose}
+            >
               x
             </button>
           </div>
